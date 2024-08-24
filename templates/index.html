@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat and Chess</title>
+    <link rel="stylesheet"
+      href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
+      integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
+      crossorigin="anonymous">
+      <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            width: 70%; /* Adjust as needed */
+            max-width: 1200px; /* Adjust as needed */
+            justify-content: space-between;
+        }
+        #board {
+            width: 50%;
+            min-width: 200px; /* Adjust as needed */
+        }
+        #chat-container {
+            width: 70%;
+            min-width: 200px; /* Adjust as needed */
+            display: flex;
+            flex-direction: column;
+            padding-left: 20px;
+            padding-top: 40px;
+        }
+        #messages {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+        #message {
+            width: calc(100% - 80px); /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="board"></div>
+        <div id="chat-container">
+            <ul id="messages"></ul>
+            <div style="display: flex; align-items: center;">
+                <input id="message" autocomplete="off">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ensure jQuery is included before Chessboard.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+    crossorigin="anonymous"></script>
+
+    <script src="/static/js/chessboard-1.0.0.js"></script>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/static/chessboard.js"></script>
+    <script src="/static/chat.js"></script>
+</body>
+</html>
