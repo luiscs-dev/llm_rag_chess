@@ -24,7 +24,8 @@ chess_board = """
     integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
     crossorigin="anonymous"></script>
 
-    <script src="static/js/chessboard-1.0.0.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.js"></script> -->
+    <script src="./static/js/chessboard-1.0.0.js"></script> 
     <!--<script src="static/chessboard.js"></script> -->
 
     <script>

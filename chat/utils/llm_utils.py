@@ -6,11 +6,14 @@ client = None
 es_client = None
 
 if es_client == None: 
-    es_client = Elasticsearch('http://localhost:9200')
-
+    #es_client = Elasticsearch('http://localhost:9200')
+    es_client = Elasticsearch('http://host.docker.internal:9200')
+    #es_client = Elasticsearch('http://elasticsearch:9200')
+    
 if client == None: 
     client = OpenAI(
-        base_url='http://localhost:11435/v1/',
+        #base_url='http://localhost:11434/v1/',
+        base_url='http://ollama:11434/v1/',
         api_key='ollama',
     )
 
@@ -21,18 +24,25 @@ def get_prompt(version='v1'):
     return content_file
     
 def build_prompt(query, search_results):
-    prompt_template = get_prompt(version='v1')
+    prompt_template = get_prompt(version='v5')
     
     context = ""
     
     for doc in search_results:
         context += f"{{moves: {doc['moves']}\n"
         context += f"opening: {doc['opening']}\n"
+        context += f"match result: {doc['result']}\n"
         context += f"white_player: {doc['white_player']}\n"
         context += f"black_player: {doc['black_player']}\n"
         context += f"white_elo: {doc['white_elo']}\n"
         context += f"black_elo: {doc['black_elo']}\n}}\n"
     
+    #games = [
+    #    f"{i}. Opening {'opening'} Match result: {game['result']} Match moves:{game['moves']}"
+    #    for i, game in enumerate(search_results,1)
+    #]
+    #context = "\n".join(games)
+
     prompt=prompt_template.format(question=query, context=context).strip()
 
     return prompt
@@ -45,7 +55,7 @@ def elastic_search(query):
                 "must": {
                     "multi_match": {
                         "query": query,
-                        "fields": ["moves^2", "opening"],
+                        "fields": ["moves^3", "opening"],
                         "type": "best_fields"
                     }
                 }
@@ -72,7 +82,7 @@ def llm(prompt):
 
 def rag(query):
     results = elastic_search(query)
-    prompt = build_prompt(query, results)
+    prompt = build_prompt(query, results[:5])
     print(prompt)
     print('//////////')
     answer = llm(prompt)

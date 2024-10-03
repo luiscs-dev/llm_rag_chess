@@ -24,12 +24,12 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-st.sidebar.header("Study section")
-#st.sidebar.text("You can ")
-with st.sidebar:
-   components.html(chess_utils.chess_board, height=550)
 
-@st.cache_data(ttl="6h23s")
+st.sidebar.header("Study section")
+with st.sidebar:
+    components.html(chess_utils.chess_board, height=550)
+
+#@st.cache_data(ttl="6h23s")
 def rag(prompt):
     return llm_utils.rag(prompt)
     
@@ -43,10 +43,10 @@ def hash_text(text):
     return hashed_text
 
 st.title("💬 Chess Assistant")
-st.caption("🚀 A Streamlit chatbot powered by Ollama")
+st.caption("🚀 Take your chess abilities to the next level!, powered by Ollama")
 #st.write(st.session_state)
 
-messages = st.container(height=350)
+messages = st.container(height=550)
 
 
 def render_messages():
@@ -65,10 +65,10 @@ def store_feedback(**kwargs):
 
 
 
-if prompt := st.chat_input("How can I assist you, today?"):
+if prompt := st.chat_input("Let's improve your chess abilities!"):
 
     st.session_state.messages.append({'role': 'user', 'content': prompt})
-    with st.status(f"Searching information about {prompt[:40]} ..."):
+    with st.status(f"Analyzing {prompt[:40]} ..."):
         answer = rag(prompt)
     
     st.session_state.messages.append({'role': 'assistant', 'content': answer})
@@ -91,11 +91,3 @@ if prompt := st.chat_input("How can I assist you, today?"):
     with col3:
         data["rating"] = 'thumbs_up'
         st.button("👍", on_click=store_feedback, kwargs=data)
-
-
-    
-
-    
-   
-
-

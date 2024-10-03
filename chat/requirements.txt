@@ -1,4 +1,8 @@
 python-chess
 openai
-streamlit
+streamlit==1.37.0
 elasticsearch
+psycopg2-binary
+python-dotenv
+chess
+chardet
