@@ -164,6 +164,65 @@ The code for the application is in the [`chat`](chat/) directory:
 - [`septup.py`](chat/utils/septup.py) - Script to transform PGN data into docs to feed elasticsearch
 - [`prompts`](chat/utils/prompts) - All prompt versions
 
+### Ingestion
+
+The ingestion script is in [`setup.py`](chat/utils/septup.py).
+
+Information is parsed from PGN format to json format and ingested into Elasticsearch.
+It is needed to run this script before using the Streamlit app.
+
+### RAG flow evaluation
+
+We used the LLM-as-a-Judge metric to evaluate the quality
+of our RAG flow.
+
+We tested with **Ollama**:
+
+Every time a user ask a question, the evaluation process runs 
+and stores the results in the DB to be visible on the Grafana Dashboard.
+
+## Monitoring
+
+We use Grafana for monitoring the application. 
+
+It's accessible at [localhost:3000](http://localhost:3000):
+
+- Login: "admin"
+- Password: "admin"
+
+### Monitoring
+
+<p align="center">
+  <img src="img/grafana_dashboard.png">
+</p>
+
+The monitoring dashboard contains:
+
+## Grafana queries
+
+1. **Answer relevance from user's perspective**
+2. **Relevance of LLM answers**
+3. **Prompt Token Usage**
+4. **Evaluation Token Usage**
+5. **RAG response time (sec)**
+6. **Last conversations**
+
+
+### Setting up Grafana
+
+The necessary files to setup the dashboard are stored in [`grafana`](grafana/) folder:
+
+You will  need to 
+- Import a dashboard on the grafana UI.
+<p align="center">
+  <img src="img/grafana_import.png">
+</p>
+
+- Upload or copy the content of the [`dashboard.json`](grafana/dashboard.json)
+<p align="center">
+  <img src="img/grafana_file.png">
+</p>
+
 ## Additionals
 
 Before creating the app, some ideas were tested on a notebook, you can find it on [`rag-intro`](rag-intro.ipynb) notebook.
