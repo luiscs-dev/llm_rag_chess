@@ -46,6 +46,15 @@ It can be used to get:
 3. **Practice Puzzles**: Provide one or two puzzles for the player to practice, formatted in FEN notation.
 4. **Study Material**: Suggest similar games that align with the user's match for further study.
 
+## RAG Diagram
+
+<p align="center">
+  <img src="img/chess_assistant_app_diagram.png">
+</p>
+
+**Knowledge base** was built with the games provided by lichess. The matches are parsed and ingested into Elasticsearch by a python script.
+**LLM** Ollama was used as a LLM.
+
 ## Dataset
 
 The dataset used in this project contains information about
