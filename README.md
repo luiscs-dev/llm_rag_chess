@@ -27,7 +27,7 @@ To elevate your chess skills, you need a reliable coach who can pinpoint your mi
 - **Beginners:** Players new to chess seeking foundational knowledge and skills.
 - **Intermediate Players:** Those looking to refine their strategies and reduce mistakes.
 
-TacticMate will enable players of all skill levels to identify and learn from their mistakes, ultimately improving their chess skills and boosting their confidence on the board. By offering focused insights and resources, the bot creates a more engaging and effective learning experience for chess enthusiasts.
+**TacticMate** will enable players of all skill levels to identify and learn from their mistakes, ultimately improving their chess skills and boosting their confidence on the board. By offering focused insights and resources, the bot creates a more engaging and effective learning experience for chess enthusiasts.
 
 <p align="center">
   <img src="img/app.png">
