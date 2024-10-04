@@ -29,7 +29,7 @@ st.sidebar.header("Study section")
 with st.sidebar:
     components.html(chess_utils.chess_board, height=550)
 
-#@st.cache_data(ttl="6h23s")
+@st.cache_data(ttl="6h23s")
 def rag(prompt):
     return llm_utils.rag(prompt)
     
@@ -42,7 +42,7 @@ def hash_text(text):
     
     return hashed_text
 
-st.title("💬 Chess Assistant")
+st.title("💬 TacticMate - A Chess Assistant")
 st.caption("🚀 Take your chess abilities to the next level!, powered by Ollama")
 #st.write(st.session_state)
 
