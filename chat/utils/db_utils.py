@@ -4,9 +4,9 @@ from psycopg2.extras import DictCursor
 from datetime import datetime, timezone
 
 
-def get_db_connection():
+def get_db_connection(host_p="localhost"):
     return psycopg2.connect(
-        host=os.getenv("POSTGRES_HOST", "postgres"),
+        host=host_p,
         database=os.getenv("POSTGRES_DB", "chess_assistant"),
         user=os.getenv("POSTGRES_USER", "chess_assistant"),
         password=os.getenv("POSTGRES_PASSWORD", "chess_assistant"),
@@ -14,7 +14,7 @@ def get_db_connection():
 
 
 def init_db():
-    conn = get_db_connection()
+    conn = get_db_connection("postgres")
     try:
         with conn.cursor() as cur:
             cur.execute("DROP TABLE IF EXISTS feedback")
@@ -35,7 +35,6 @@ def init_db():
                     eval_prompt_tokens INTEGER NOT NULL,
                     eval_completion_tokens INTEGER NOT NULL,
                     eval_total_tokens INTEGER NOT NULL,
-                    openai_cost FLOAT NOT NULL,
                     timestamp TIMESTAMP WITH TIME ZONE NOT NULL
                 )
             """)
@@ -56,7 +55,7 @@ def save_conversation(conversation_id, question, answer_data, timestamp=None):
     if timestamp is None:
         timestamp = datetime.now()
 
-    conn = get_db_connection()
+    conn = get_db_connection("postgres")
     try:
         with conn.cursor() as cur:
             cur.execute(
@@ -64,8 +63,8 @@ def save_conversation(conversation_id, question, answer_data, timestamp=None):
                 INSERT INTO conversations 
                 (id, question, answer, model_used, response_time, relevance, 
                 relevance_explanation, prompt_tokens, completion_tokens, total_tokens, 
-                eval_prompt_tokens, eval_completion_tokens, eval_total_tokens, openai_cost, timestamp)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                eval_prompt_tokens, eval_completion_tokens, eval_total_tokens, timestamp)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
                     conversation_id,
@@ -81,7 +80,6 @@ def save_conversation(conversation_id, question, answer_data, timestamp=None):
                     answer_data["eval_prompt_tokens"],
                     answer_data["eval_completion_tokens"],
                     answer_data["eval_total_tokens"],
-                    answer_data["openai_cost"],
                     timestamp
                 ),
             )
@@ -94,7 +92,7 @@ def save_feedback(conversation_id, feedback, timestamp=None):
     if timestamp is None:
         timestamp = datetime.now()
 
-    conn = get_db_connection()
+    conn = get_db_connection("postgres")
     try:
         with conn.cursor() as cur:
             cur.execute(
@@ -107,7 +105,7 @@ def save_feedback(conversation_id, feedback, timestamp=None):
 
 
 def get_recent_conversations(limit=5, relevance=None):
-    conn = get_db_connection()
+    conn = get_db_connection("postgres")
     try:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             query = """
@@ -126,7 +124,7 @@ def get_recent_conversations(limit=5, relevance=None):
 
 
 def get_feedback_stats():
-    conn = get_db_connection()
+    conn = get_db_connection("postgres")
     try:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("""

@@ -90,8 +90,8 @@ def load_docs_in_elasticsearch(docs):
         es_client.index(index=index_name, document=new_doc)
 
 if __name__ == "__main__":
-    #print("Initializing database...")
-    #init_db()
+    print("Initializing database...")
+    init_db()
 
     print("Extracting info from data/lichess_db.pgn...")
     load_docs_in_elasticsearch(get_chess_games())

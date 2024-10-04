@@ -1,5 +1,7 @@
 from openai import OpenAI
 from elasticsearch import Elasticsearch
+import time
+import json 
 
 index_name = "chess-rag" 
 client = None
@@ -73,18 +75,72 @@ def elastic_search(query):
     return results
 
 def llm(prompt):
+    start_time = time.time()
     response = client.chat.completions.create(
         model='phi3',
         messages=[{"role": "user", "content": prompt}]
     )
     
-    return response.choices[0].message.content
+    answer = response.choices[0].message.content
+    tokens = {
+            'prompt_tokens': response.usage.prompt_tokens,
+            'completion_tokens': response.usage.completion_tokens,
+            'total_tokens': response.usage.total_tokens
+    }
+    end_time = time.time()
+    response_time = end_time - start_time
+
+    return answer, tokens, response_time
+
+def evaluate_relevance(question, answer):
+    prompt_template = """
+    You are an expert evaluator for a Retrieval-Augmented Generation (RAG) system.
+    Your task is to analyze the relevance of the generated answer to the given question.
+    Based on the relevance of the generated answer, you will classify it
+    as "NON_RELEVANT", "PARTLY_RELEVANT", or "RELEVANT".
+
+    Here is the data for evaluation:
+
+    Question: {question}
+    Generated Answer: {answer}
+
+    Please analyze the content and context of the generated answer in relation to the question
+    and provide your evaluation in parsable JSON without using code blocks:
+
+    {{
+      "Relevance": "NON_RELEVANT" | "PARTLY_RELEVANT" | "RELEVANT",
+      "Explanation": "[Provide a brief explanation for your evaluation]"
+    }}
+    """.strip()
+
+    prompt = prompt_template.format(question=question, answer=answer)
+    evaluation, tokens, _ = llm(prompt)
+    
+    try:
+        json_eval = json.loads(evaluation)
+        return json_eval['Relevance'], json_eval['Explanation'], tokens
+    except json.JSONDecodeError:
+        return "UNKNOWN", "Failed to parse evaluation", tokens
+
 
 def rag(query):
     results = elastic_search(query)
     prompt = build_prompt(query, results[:5])
     print(prompt)
     print('//////////')
-    answer = llm(prompt)
+    answer, tokens, response_time = llm(prompt)
+    relevance, explanation, eval_tokens = evaluate_relevance(query, answer)
 
-    return answer
+    return {
+        'answer': answer,
+        'response_time': response_time,
+        'relevance': relevance,
+        'relevance_explanation': explanation,
+        'model_used': "ollama",
+        'prompt_tokens': tokens['prompt_tokens'],
+        'completion_tokens': tokens['completion_tokens'],
+        'total_tokens': tokens['total_tokens'],
+        'eval_prompt_tokens': eval_tokens['prompt_tokens'],
+        'eval_completion_tokens': eval_tokens['completion_tokens'],
+        'eval_total_tokens': eval_tokens['total_tokens']
+    }
