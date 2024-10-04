@@ -54,7 +54,7 @@ It can be used to get:
 
 **Knowledge base** was built with the games provided by lichess. The matches are parsed and ingested into Elasticsearch by a python script.
 
-**LLM** Ollama was used as a LLM.
+**LLM** Ollama Phi3 was used as a LLM.
 
 ## Dataset
 
@@ -108,7 +108,7 @@ Before running the application you need to:
 llm_rag_chess/data/lichess_db.pgn
 ```
 
-- If you have **Ollama** model already in your system, you need to copy it
+- If you have **Ollama - phi3** model already in your system, you need to copy it
 on the ollama dir.
 ```
 llm_rag_chess/ollama/models
