@@ -53,6 +53,7 @@ It can be used to get:
 </p>
 
 **Knowledge base** was built with the games provided by lichess. The matches are parsed and ingested into Elasticsearch by a python script.
+
 **LLM** Ollama was used as a LLM.
 
 ## Dataset
