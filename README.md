@@ -210,7 +210,7 @@ The monitoring dashboard contains:
 
 ### Setting up Grafana
 
-The necessary files to setup the dashboard are stored in [`grafana`](grafana/) folder:
+The necessary files to setup the dashboard are stored in [`grafana`](monitoring/grafana/) folder:
 
 You will  need to 
 - Import a dashboard on the grafana UI.
@@ -218,7 +218,7 @@ You will  need to
   <img src="img/grafana_import.png">
 </p>
 
-- Upload or copy the content of the [`dashboard.json`](grafana/dashboard.json)
+- Upload or copy the content of the [`dashboard.json`](monitoring/grafana/dashboard.json)
 <p align="center">
   <img src="img/grafana_file.png">
 </p>
